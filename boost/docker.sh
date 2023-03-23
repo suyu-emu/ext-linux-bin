@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 
 THIS=$(readlink -e $0)
 PKG_NAME=$1

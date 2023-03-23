@@ -1,5 +1,5 @@
 #!/bin/bash
-
+set -e
 # This script is meant to make it easy to build a package using a Docker container.
 
 # Run this from the same directory as source directory
@@ -7,7 +7,7 @@
 THIS=$(readlink -e $0)
 USER_ID=`id -u`
 GROUP_ID=`id -g`
-VERSION=1_79_0
+VERSION=1_81_0
 PKG_NAME=boost
 
 mkdir -p $PKG_NAME-$VERSION
