@@ -1,19 +1,25 @@
 #!/bin/bash
+set -e
 
 # This script is meant to make it easy to build GCC using a Docker container.
-
-# Run this from the same directory as gcc source directory
-# Recommended to clone GCC with:
-#    git clone --depth 1 -b "releases/gcc-11.3.0" git://gcc.gnu.org/git/gcc.git
 
 THIS=$(readlink -e $0)
 USER_ID=`id -u`
 GROUP_ID=`id -g`
-VERSION=11.3.0
+VERSION=12.2.0
 
-mkdir -p gcc-$VERSION
+if [ ! -d gcc ]; then
+    git clone --depth 1 -b "releases/gcc-$VERSION" git://gcc.gnu.org/git/gcc.git
+else
+    cd gcc
+    sudo git clean -fxd
+    git restore :/
+    cd ..
+fi
 
-docker run -v $(pwd):/src -w /src -u root -t debian:test /bin/bash /src/docker.sh $VERSION
+mkdir -p gcc-$VERSION | true
+
+docker run -v $(pwd):/src -w /src -u root -t yuzuemu/build-environments:linux-fresh /bin/bash /src/docker.sh $VERSION
 
 cp -v $THIS gcc-$VERSION/
 tar cv gcc-$VERSION | xz -T0 -c | split --bytes=90MB - gcc-$VERSION.tar.xz.
