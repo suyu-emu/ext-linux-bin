@@ -123,7 +123,7 @@ if [ "${DEPLOY_QT}" == "1" ]; then
   
   _QT_PLUGIN_PATH=$(readlink -e $(find ${_QT_PATH} -type d -regex '.*/plugins/platforms' | head -n 1)/../)
 
-  for i in audio bearer imageformats mediaservice platforminputcontexts platformthemes xcbglintegrations platforms; do
+  for i in audio bearer imageformats mediaservice platforminputcontexts platformthemes xcbglintegrations platforms wayland-decoration-client wayland-graphics-integration-client wayland-graphics-integration-server wayland-shell-integration; do
     mkdir -p ${LIB_DIR}/../plugins/${i}
     cp -rnv ${_QT_PLUGIN_PATH}/${i}/*.so ${LIB_DIR}/../plugins/${i}
     find ${LIB_DIR}/../plugins/ -type f -regex '.*\.so' -exec patchelf --set-rpath '$ORIGIN/../../lib:$ORIGIN' {} ';'
