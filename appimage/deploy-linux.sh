@@ -124,7 +124,7 @@ if [ "${DEPLOY_QT}" == "1" ]; then
   _QT_PLUGIN_PATH=$(readlink -e $(find ${_QT_PATH} -type d -regex '.*/plugins/platforms' | head -n 1)/../)
 
   mkdir -p ${LIB_DIR}/../plugins/platforms
-  cp -nv "${_QT_PLUGIN_PATH}/platforms/libqxcb.so" ${LIB_DIR}/../plugins/platforms/
+  cp -nv "${_QT_PLUGIN_PATH}/platforms/*" ${LIB_DIR}/../plugins/platforms/
 	# Find any remaining libraries needed for Qt libraries
   _NOT_FOUND+=$(get_deps ${LIB_DIR}/../plugins/platforms/libqxcb.so $LIB_DIR)
 
