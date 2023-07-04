@@ -1,4 +1,7 @@
 #!/bin/bash
+#
+# !!! DEPRECATED !!!
+#
 # [DEPLOY_QT=1] deploy-linux.sh <executable>
 #   (Simplified) bash re-implementation of [linuxdeploy](https://github.com/linuxdeploy).
 #   Reads [executable] and copies required libraries to [AppDir]/usr/lib
