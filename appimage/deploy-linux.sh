@@ -1,7 +1,4 @@
 #!/bin/bash
-#
-# !!! DEPRECATED !!!
-#
 # [DEPLOY_QT=1] deploy-linux.sh <executable>
 #   (Simplified) bash re-implementation of [linuxdeploy](https://github.com/linuxdeploy).
 #   Reads [executable] and copies required libraries to [AppDir]/usr/lib
@@ -126,12 +123,7 @@ if [ "${DEPLOY_QT}" == "1" ]; then
   
   _QT_PLUGIN_PATH=$(readlink -e $(find ${_QT_PATH} -type d -regex '.*/plugins/platforms' | head -n 1)/../)
 
-  mkdir -p ${LIB_DIR}/../plugins/platforms
-  cp -nv "${_QT_PLUGIN_PATH}/platforms/libqxcb.so" ${LIB_DIR}/../plugins/platforms/
-	# Find any remaining libraries needed for Qt libraries
-  _NOT_FOUND+=$(get_deps ${LIB_DIR}/../plugins/platforms/libqxcb.so $LIB_DIR)
-
-  for i in audio bearer imageformats mediaservice platforminputcontexts platformthemes xcbglintegrations; do
+  for i in audio bearer imageformats mediaservice platforminputcontexts platformthemes xcbglintegrations platforms wayland-decoration-client wayland-graphics-integration-client wayland-graphics-integration-server wayland-shell-integration; do
     mkdir -p ${LIB_DIR}/../plugins/${i}
     cp -rnv ${_QT_PLUGIN_PATH}/${i}/*.so ${LIB_DIR}/../plugins/${i}
     find ${LIB_DIR}/../plugins/ -type f -regex '.*\.so' -exec patchelf --set-rpath '$ORIGIN/../../lib:$ORIGIN' {} ';'
@@ -154,8 +146,8 @@ patchelf --set-rpath '$ORIGIN/../lib' $_EXECUTABLE
 _APPDIR=$2
 cd ${_APPDIR}
 
-cp -nvs $(find -type f -regex '.*/icons/.*\.svg' -printf '%P\n' || head -n 1) ./
-cp -nvs $(find -type f -regex '.*/applications/.*\.desktop' -printf '%P\n' || head -n 1) ./
+cp -nvs $(find -type f -regex '.*/icons/.*\.svg' || head -n 1) ./
+cp -nvs $(find -type f -regex '.*/applications/.*\.desktop' || head -n 1) ./
 
 if [ "${_NOT_FOUND}" != "" ]; then
   >&2 echo "WARNING: failed to find the following libraries:"
